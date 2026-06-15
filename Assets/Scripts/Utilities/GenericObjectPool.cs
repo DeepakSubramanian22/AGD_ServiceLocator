@@ -15,13 +15,13 @@ namespace ServiceLocator.Utilities
     /// <typeparam object Type to be pooled = "T"></typeparam>
     public class GenericObjectPool<T> where T : class
     {
-        public List<PooledItem<T>> pooledItems = new List<PooledItem<T>>();
+        public List<PooledItem> pooledItems = new List<PooledItem>();
 
         protected T GetItem()
         {
             if (pooledItems.Count > 0)
             {
-                PooledItem<T> item = pooledItems.Find(item => !item.isUsed);
+                PooledItem item = pooledItems.Find(item => !item.isUsed);
                 if (item != null)
                 {
                     item.isUsed = true;
@@ -33,7 +33,7 @@ namespace ServiceLocator.Utilities
 
         private T CreateNewPooledItem()
         {
-            PooledItem<T> newItem = new PooledItem<T>();
+            PooledItem newItem = new PooledItem();
             newItem.Item = CreateItem();
             newItem.isUsed = true;
             pooledItems.Add(newItem);
@@ -47,11 +47,11 @@ namespace ServiceLocator.Utilities
 
         public void ReturnItem(T item)
         {
-            PooledItem<T> pooledItem = pooledItems.Find(i => i.Item.Equals(item));
+            PooledItem pooledItem = pooledItems.Find(i => i.Item.Equals(item));
             pooledItem.isUsed = false;
         }
 
-        public class PooledItem<T>
+        public class PooledItem
         {
             public T Item;
             public bool isUsed;
